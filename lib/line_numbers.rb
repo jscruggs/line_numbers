@@ -31,8 +31,16 @@ class LineNumbers
   
   def process_class(sexp)
     class_name = sexp[1]
+    process_class_self_blocks(sexp, class_name)
     sexp.each_of_type(:defn) { |s| @locations["#{class_name}##{s[1]}"] = (s.line)..(s.last.line) }
     sexp.each_of_type(:defs) { |s| @locations["#{class_name}::#{s[2]}"] = (s.line)..(s.last.line) }
+  end
+  
+  def process_class_self_blocks(sexp, class_name)
+    sexp.each_of_type(:sclass) do |sexp_in_class_self_block| 
+      sexp_in_class_self_block.each_of_type(:defn) { |s| @locations["#{class_name}::#{s[1]}"] = (s.line)..(s.last.line) }
+      sexp_in_class_self_block.find_and_replace_all(:defn, :ignore_me)
+    end
   end
   
 end
