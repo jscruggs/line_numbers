@@ -15,7 +15,7 @@ class Foo # Line 1
 end
 
 # In same Dir as foo.rb:
-ln = LineNumbers.new(File.expand_path(File.dirname(__FILE__) + "/resources/foo.rb"))
+ln = LineNumbers.new(File.expand_path(File.dirname(__FILE__) + "/foo.rb"))
 
 ln.in_method?(2) #=>false
 ln.in_method?(8) #=> true
