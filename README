@@ -1,0 +1,27 @@
+Mucking about trying to use ruby_parser to find what methods are defined on what line.  Will become a gem once I get it working.
+
+Read the specs to see how it works in detail but here's a quick example:
+
+# File foo.rb
+class Foo # Line 1
+# Line 2
+  def self.awesome
+    1 + 1
+  end
+  
+  def what
+    12 # Line 8
+  end
+end
+
+# In same Dir as foo.rb:
+ln = LineNumbers.new(File.expand_path(File.dirname(__FILE__) + "/resources/foo.rb"))
+
+ln.in_method?(2) #=>false
+ln.in_method?(8) #=> true
+
+ln.method_at_line(8) #=> "Foo#what"
+ln.method_at_line(3) #=> "Foo::awesome"
+
+
+Ultimately I'm planning on using this in metric_fu to connect Rcov output with the other metrics' output so I can combine metrics.
